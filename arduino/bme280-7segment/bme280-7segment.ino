@@ -22,6 +22,7 @@
 
 #include "Adafruit_LEDBackpack.h"
 #include "Adafruit_GFX.h"
+#include "RTClib.h"
 
 
 
@@ -42,6 +43,8 @@ Adafruit_7segment matrix_70 = Adafruit_7segment();
 Adafruit_7segment matrix_72 = Adafruit_7segment();
 Adafruit_7segment matrix_74 = Adafruit_7segment();
 
+RTC_DS1307 rtc;
+
 void setup() {
   
   Serial.begin(9600);
@@ -59,7 +62,10 @@ void setup() {
 
   matrix_74.begin(0x74);
   matrix_74.setBrightness(16);
+
+  rtc.begin();
 }
+
 
 void printTemperature(float temperature) {
   int temp = (int)(temperature * 100);
@@ -106,13 +112,35 @@ void printPressure(float pressure) {
     Serial.println(" hPa");
 }
 
+void printTime(DateTime dateTime) {
+  int hour = dateTime.hour();
+  int minute = dateTime.minute();
+  
+  matrix_72.writeDigitNum(0, (hour / 10) % 10, false);
+  matrix_72.writeDigitNum(1, hour % 10, false);
+  matrix_72.drawColon(true);
+  matrix_72.writeDigitNum(3, (minute / 10) % 10, false);
+  matrix_72.writeDigitNum(4, minute % 10, false);
+ 
+  matrix_72.writeDisplay();
+
+  //debug
+    Serial.print(dateTime.hour(), DEC);
+    Serial.print(':');
+    Serial.print(dateTime.minute(), DEC);
+
+}
+
 void loop() {
   float temperature = bme.readTemperature();
   float humidity = bme.readHumidity();
   float pressure = bme.readPressure();
 
+  DateTime now = rtc.now();
+
   printTemperature(temperature);
-  printHumidity(humidity);
+  //printHumidity(humidity);
+  printTime(now);
   printPressure(pressure);
   delay(2000);
 }
