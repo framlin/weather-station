@@ -27,7 +27,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1"
      inkscape:cx="341.75526"
-     inkscape:cy="509.55967"
+     inkscape:cy="429.55967"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -281,44 +281,44 @@
        width="531.49603"
        height="354.33072"
        x="80"
-       y="381.36221" />
+       y="378.13385" />
     <path
        inkscape:connector-curvature="0"
        style="opacity:0.50400002;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.99417245;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 125.64275,471.81203 178.7145,0 0,67.10036 -178.7145,0 z"
+       d="m 127.64275,470.58367 178.7145,0 0,67.10036 -178.7145,0 z"
        id="rect4138-50" />
     <path
        inkscape:connector-curvature="0"
        style="opacity:0.5;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.99417245;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 381.64275,574.81203 178.7145,0 0,67.10036 -178.7145,0 z"
+       d="m 383.64275,569.58367 178.7145,0 0,67.10036 -178.7145,0 z"
        id="rect4138-5-1" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:50px;line-height:125%;font-family:'TeX Gyre Chorus';-inkscape-font-specification:'TeX Gyre Chorus, Medium';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="312"
-       y="506.36218"
+       y="503.13382"
        id="text4432"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          x="312"
-         y="506.36218"
+         y="503.13382"
          id="tspan4436">Temperature</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:50px;line-height:125%;font-family:'TeX Gyre Chorus';-inkscape-font-specification:'TeX Gyre Chorus, Medium';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="282"
-       y="638.36218"
+       y="635.13385"
        id="text4440"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4442"
          x="282"
-         y="638.36218">Time</tspan></text>
+         y="635.13385">Time</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;line-height:125%;font-family:'TeX Gyre Schola Math';-inkscape-font-specification:'TeX Gyre Schola Math, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="131"
-       y="592.36218"
+       y="589.13385"
        id="text4448"
        sodipodi:linespacing="125%"
        inkscape:transform-center-x="-3"
@@ -326,26 +326,26 @@
          sodipodi:role="line"
          id="tspan4450"
          x="131"
-         y="592.36218">°C</tspan></text>
+         y="589.13385">°C</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:30px;line-height:125%;font-family:'TeX Gyre Chorus';-inkscape-font-specification:'TeX Gyre Chorus, Medium';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:30px;line-height:125%;font-family:'TeX Gyre Chorus';-inkscape-font-specification:'TeX Gyre Chorus, Medium';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="470"
-       y="564.36218"
+       y="559.13385"
        id="text4444-8"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4446-6"
          x="470"
-         y="564.36218">hh:mm</tspan></text>
+         y="559.13385">hh:mm</tspan></text>
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:10.62992096;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 284,652.3622 290,0 0,-100"
+       d="m 284,649.13384 290,0 0,-100"
        id="path4490"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:10.67499161;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 114.9187,657.4435 0,-196.46417 465.74324,0"
+       d="m 114.9187,654.21514 0,-196.46417 465.74324,0"
        id="path4504"
        inkscape:connector-curvature="0" />
   </g>
