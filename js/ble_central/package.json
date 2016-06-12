@@ -1,0 +1,13 @@
+{
+  "name": "ble_central",
+  "version": "0.1.0",
+  "description": "",
+  "main": "ble_central.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
