@@ -13,8 +13,6 @@ var frmEnvHumidity = null;
 var frmEnvPressure = null;
 var frmEnvTemperature = null;
 
-var isFree = false;
-
 const PAUSE = 10000;
 
 
@@ -45,7 +43,6 @@ noble.on('discover', function(device) {
 
         // we found a device, stop scanning
         noble.stopScanning();
-        isFree = true;
         fetchEnvValues(device);
 
     }
@@ -58,31 +55,42 @@ function fetchEnvValues(device) {
     // It can also be constructed if the uuid is already known.
     ///
     device.connect(function (err) {
-        //
-        // Once the device has been connected, then discover the
-        // services and characteristics of interest.
-        //
-        device.discoverAllServicesAndCharacteristics(function (err, services, characteristics) {
-            characteristics.forEach(function(characteristic) {
-                //
-                // Loop through each characteristic and match them to the
-                // UUIDs that we know about.
-                //
-                if (characteristic.uuid === FRM_ENV_HUMIDITY_UUID) {
-                    frmEnvHumidity = characteristic;
-                }
-                else if (characteristic.uuid === FRM_ENV_PRESSURE_UUID) {
-                    frmEnvPressure = characteristic;
-                }
-                else if (characteristic.uuid === FRM_ENV_TEMPERATURE_UUID) {
-                    frmEnvTemperature = characteristic;
-                }
-            });
+        if (!err) {
+            //
+            // Once the device has been connected, then discover the
+            // services and characteristics of interest.
+            //
+            device.discoverAllServicesAndCharacteristics(function (err, services, characteristics) {
+                if (err) {
+                    device.disconnect();
+                    noble.startScanning();
+                } else {
+                    characteristics.forEach(function(characteristic) {
+                        //
+                        // Loop through each characteristic and match them to the
+                        // UUIDs that we know about.
+                        //
+                        if (characteristic.uuid === FRM_ENV_HUMIDITY_UUID) {
+                            frmEnvHumidity = characteristic;
+                        }
+                        else if (characteristic.uuid === FRM_ENV_PRESSURE_UUID) {
+                            frmEnvPressure = characteristic;
+                        }
+                        else if (characteristic.uuid === FRM_ENV_TEMPERATURE_UUID) {
+                            frmEnvTemperature = characteristic;
+                        }
+                    });
 
-            if (frmEnvHumidity && frmEnvPressure && frmEnvTemperature) {
-                readEnvValues(device);
-            }
-        });
+                    if (frmEnvHumidity && frmEnvPressure && frmEnvTemperature) {
+                        readEnvValues(device);
+                    }
+                }
+
+            });
+        } else {
+            device.disconnect();
+            noble.startScanning();
+        }
     });
 
 }
@@ -90,15 +98,12 @@ function fetchEnvValues(device) {
 
 function readEnvValues(device) {
 
-    function finalize() {
-        if (frmEnvHumidityValue && frmEnvPressureValue && frmEnvTemperatureValue) {
+    function finalize(force) {
+        if ((frmEnvHumidityValue && frmEnvPressureValue && frmEnvTemperatureValue) || force) {
             device.disconnect();
-            var handle = setInterval(function onTick() {
-                if (isFree) {
-                    isFree = false;
-                    clearInterval(handle);
-                    noble.startScanning();
-                }
+            var handle = setTimeout(function onTick() {
+                clearInterval(handle);
+                noble.startScanning();
             }, PAUSE);
         }
     }
@@ -110,22 +115,33 @@ function readEnvValues(device) {
     var frmEnvTemperatureValue = false;
 
     frmEnvHumidity.read(function onRead(error, data) {
-
-        frmEnvHumidityValue = parseFloat(ConvertBase.hex2dec(data.toString('hex'))/100);
-        mqttClient.publish('environment/humidity', frmEnvHumidityValue.toString());
-        finalize();
+        if (error) {
+            finalize(true);
+        } else {
+            frmEnvHumidityValue = parseFloat(ConvertBase.hex2dec(data.toString('hex'))/100);
+            mqttClient.publish('environment/humidity', frmEnvHumidityValue.toString());
+            finalize();
+        }
     });
 
     frmEnvPressure.read(function onRead(error, data) {
-        frmEnvPressureValue = ConvertBase.hex2dec(data.toString('hex'));
-        mqttClient.publish('environment/pressure', frmEnvPressureValue.toString());
-        finalize();
+        if (error) {
+            finalize(true);
+        } else {
+            frmEnvPressureValue = ConvertBase.hex2dec(data.toString('hex'));
+            mqttClient.publish('environment/pressure', frmEnvPressureValue.toString());
+            finalize();
+        }
     });
 
     frmEnvTemperature.read(function onRead(error, data) {
-        frmEnvTemperatureValue = parseFloat(ConvertBase.hex2dec(data.toString('hex'))/100);
-        mqttClient.publish('environment/temperature', frmEnvTemperatureValue.toString());
-        finalize();
+        if (error) {
+            finalize(true);
+        } else {
+            frmEnvTemperatureValue = parseFloat(ConvertBase.hex2dec(data.toString('hex'))/100);
+            mqttClient.publish('environment/temperature', frmEnvTemperatureValue.toString());
+            finalize();
+        }
     });
 
 }
