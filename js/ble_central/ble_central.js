@@ -13,7 +13,9 @@ var frmEnvHumidity = null;
 var frmEnvPressure = null;
 var frmEnvTemperature = null;
 
-const PAUSE = 60000;
+var isFree = false;
+
+const PAUSE = 10000;
 
 
 noble.on('stateChange', function(state) {
@@ -43,6 +45,7 @@ noble.on('discover', function(device) {
 
         // we found a device, stop scanning
         noble.stopScanning();
+        isFree = true;
         fetchEnvValues(device);
 
     }
@@ -90,8 +93,12 @@ function readEnvValues(device) {
     function finalize() {
         if (frmEnvHumidityValue && frmEnvPressureValue && frmEnvTemperatureValue) {
             device.disconnect();
-            setTimeout(function onTick() {
-                noble.startScanning();
+            var handle = setInterval(function onTick() {
+                if (isFree) {
+                    isFree = false;
+                    clearInterval(handle);
+                    noble.startScanning();
+                }
             }, PAUSE);
         }
     }
