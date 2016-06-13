@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "description": "",
   "main": "ble_central.js",
-  "dependencies": {},
+  "dependencies": {
+    "mqtt": "^1.11.0",
+    "noble": "^1.6.0"
+  },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ble_central"
   },
   "author": "",
   "license": "ISC"

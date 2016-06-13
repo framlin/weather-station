@@ -2,7 +2,7 @@ var mqtt    = require('mqtt');
 var client  = mqtt.connect('mqtt://pi3');
 
 client.on('connect', function () {
-    client.subscribe('meinTopic/#');
+    client.subscribe('environment/#');
     //client.publish('presence', 'Hello mqtt');
 });
 

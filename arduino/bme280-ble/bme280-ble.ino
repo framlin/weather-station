@@ -34,9 +34,9 @@
 #include "BluefruitConfig.h"
 
 #define FRM_ENV_SERVICE     "0d-01-97-f2-30-b8-11-e6-ac-61-9e-71-12-8c-ae-77"
-#define FRM_ENV_HUMIDITY    "0d-01-9a-ae-30-b8-11-e6-ac-61-9e-71-12-8c-ae-77"
-#define FRM_ENV_PRESSURE    "0d-01-9b-b2-30-b8-11-e6-ac-61-9e-71-12-8c-ae-77"
-#define FRM_ENV_TEMPERATURE "0d-01-9c-84-30-b8-11-e6-ac-61-9e-71-12-8c-ae-77"
+#define FRM_ENV_HUMIDITY    "0x2A6F"
+#define FRM_ENV_PRESSURE    "0x2A6D"
+#define FRM_ENV_TEMPERATURE "0x2A6E"
 
 
 /* ...hardware SPI, using SCK/MOSI/MISO hardware SPI pins and then user selected CS/IRQ/RST */
@@ -103,27 +103,28 @@ void setup() {
 
 
   Serial.println(F("Adding the Humidity characteristic: "));
-  success = ble.sendCommandWithIntReply( F("AT+GATTADDCHAR=UUID128=" FRM_ENV_HUMIDITY ", PROPERTIES=0x12, MIN_LEN=1, MAX_LEN=6, VALUE=00-100000"), &frmEnvHumidityCharId);
+  success = ble.sendCommandWithIntReply( F("AT+GATTADDCHAR=UUID=" FRM_ENV_HUMIDITY ", PROPERTIES=0x12, MIN_LEN=1, MAX_LEN=6, VALUE=00-100000"), &frmEnvHumidityCharId);
     if (! success) {
     error(F("Could not add FRM Humidity characteristic"));
   }
 
   Serial.println(F("Adding the Pressure characteristic: "));
-  success = ble.sendCommandWithIntReply( F("AT+GATTADDCHAR=UUID128=" FRM_ENV_PRESSURE ", PROPERTIES=0x12, MIN_LEN=1, MAX_LEN=6, VALUE=00-100000"), &frmEnvPressureCharId);
+  success = ble.sendCommandWithIntReply( F("AT+GATTADDCHAR=UUID=" FRM_ENV_PRESSURE ", PROPERTIES=0x12, MIN_LEN=1, MAX_LEN=6, VALUE=00-100000"), &frmEnvPressureCharId);
     if (! success) {
     error(F("Could not add FRM Pressure characteristic"));
   }
 
   Serial.println(F("Adding the Temperature characteristic: "));
-  success = ble.sendCommandWithIntReply( F("AT+GATTADDCHAR=UUID128=" FRM_ENV_TEMPERATURE ", PROPERTIES=0x12, MIN_LEN=1, MAX_LEN=6, VALUE=00-100000"), &frmEnvTemperatureCharId);
+  success = ble.sendCommandWithIntReply( F("AT+GATTADDCHAR=UUID=" FRM_ENV_TEMPERATURE ", PROPERTIES=0x12, MIN_LEN=1, MAX_LEN=6, VALUE=00-100000"), &frmEnvTemperatureCharId);
     if (! success) {
     error(F("Could not add FRM Temperature characteristic"));
   }
 
+/*
   //Add the Heart Rate Service to the advertising data (needed for Nordic apps to detect the service)
   Serial.print(F("Adding Heart Rate Service UUID to the advertising payload: "));
   ble.sendCommandCheckOK( F("AT+GAPSETADVDATA=02-01-06-05-02-0d-18-0a-18") );
-
+*/
   //Reset the device for the new service setting changes to take effect
   Serial.print(F("Performing a SW reset (service changes require a reset): "));
   ble.reset();
