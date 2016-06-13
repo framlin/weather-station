@@ -123,18 +123,16 @@ function readEnvValues(device) {
 
 
     frmEnvPressure.subscribe(function onSubscribe(error) {
-        frmEnvHumidity.on('data', function onData(data, isNotification) {
+        frmEnvPressure.on('data', function onData(data, isNotification) {
             frmEnvPressureValue = ConvertBase.hex2dec(data.toString('hex'));
             mqttClient.publish('environment/pressure', frmEnvPressureValue.toString());
         });
     });
 
     frmEnvTemperature.subscribe(function onSubscribe(error) {
-        frmEnvTemperature.read(function onRead(error, data) {
-            frmEnvHumidity.on('data', function onData(data, isNotification) {
-                frmEnvTemperatureValue = parseFloat(ConvertBase.hex2dec(data.toString('hex')) / 100);
-                mqttClient.publish('environment/temperature', frmEnvTemperatureValue.toString());
-            });
+        frmEnvTemperature.on('data', function onData(data, isNotification) {
+            frmEnvTemperatureValue = parseFloat(ConvertBase.hex2dec(data.toString('hex')) / 100);
+            mqttClient.publish('environment/temperature', frmEnvTemperatureValue.toString());
         });
     });
 }
