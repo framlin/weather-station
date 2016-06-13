@@ -114,36 +114,29 @@ function readEnvValues(device) {
     var frmEnvPressureValue = false;
     var frmEnvTemperatureValue = false;
 
-    frmEnvHumidity.read(function onRead(error, data) {
-        if (error) {
-            finalize(true);
-        } else {
+    frmEnvHumidity.subscribe(function onSubscribe(error) {
+        frmEnvHumidity.on('data', function onData(data, isNotification) {
             frmEnvHumidityValue = parseFloat(ConvertBase.hex2dec(data.toString('hex'))/100);
             mqttClient.publish('environment/humidity', frmEnvHumidityValue.toString());
-            finalize();
-        }
+        });
     });
 
-    frmEnvPressure.read(function onRead(error, data) {
-        if (error) {
-            finalize(true);
-        } else {
+
+    frmEnvPressure.subscribe(function onSubscribe(error) {
+        frmEnvHumidity.on('data', function onData(data, isNotification) {
             frmEnvPressureValue = ConvertBase.hex2dec(data.toString('hex'));
             mqttClient.publish('environment/pressure', frmEnvPressureValue.toString());
-            finalize();
-        }
+        });
     });
 
-    frmEnvTemperature.read(function onRead(error, data) {
-        if (error) {
-            finalize(true);
-        } else {
-            frmEnvTemperatureValue = parseFloat(ConvertBase.hex2dec(data.toString('hex'))/100);
-            mqttClient.publish('environment/temperature', frmEnvTemperatureValue.toString());
-            finalize();
-        }
+    frmEnvTemperature.subscribe(function onSubscribe(error) {
+        frmEnvTemperature.read(function onRead(error, data) {
+            frmEnvHumidity.on('data', function onData(data, isNotification) {
+                frmEnvTemperatureValue = parseFloat(ConvertBase.hex2dec(data.toString('hex')) / 100);
+                mqttClient.publish('environment/temperature', frmEnvTemperatureValue.toString());
+            });
+        });
     });
-
 }
 
 
