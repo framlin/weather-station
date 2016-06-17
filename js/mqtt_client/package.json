@@ -2,12 +2,13 @@
   "name": "mqtt_client",
   "version": "0.1.0",
   "description": "mqtt client",
-  "main": "client.js",
+  "main": "mqtt_client.js",
   "dependencies": {
     "mqtt": "^1.11.0"
   },
   "devDependencies": {},
   "scripts": {
+    "start": "node mqtt_client.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

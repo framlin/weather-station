@@ -87,6 +87,11 @@ function fetchEnvValues(device) {
                 }
 
             });
+
+            device.once('disconnect', function onDisconnect() {
+                noble.startScanning();
+            });
+
         } else {
             device.disconnect();
             noble.startScanning();
