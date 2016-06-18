@@ -5,16 +5,18 @@ var webpack = require('webpack');
 var webpackDevMiddleware = require('webpack-dev-middleware');
 var webpackHotMiddleware = require('webpack-hot-middleware');
 
+let serverConfig = require('../server.config.js');
+
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-server.listen(4200);
+server.listen(serverConfig.ioServerPort);
 
 var app = express();
 
 var compiler = webpack(config);
 
 var mqtt    = require('mqtt');
-var mqtt_client  = mqtt.connect('mqtt://pi3');
+var mqtt_client  = mqtt.connect('mqtt://'+serverConfig.mqttServer);
 
 var io_clients = [];
 
@@ -53,7 +55,7 @@ app.use('/', function (req, res) {
     res.sendFile(path.resolve('client/index.html'));
 });
 
-var port = 3000;
+var port = serverConfig.webServerPort;
 
 app.listen(port, function(error) {
   if (error) throw error;

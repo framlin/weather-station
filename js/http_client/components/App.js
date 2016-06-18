@@ -3,10 +3,11 @@ import WeatherData from './WeatherData'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import actions from '../redux/actions'
+let serverConfig = require('../server.config.js');
 
 import io from 'socket.io-client'
 
-var socket = io.connect('http://localhost:4200');
+var socket = io.connect('http://'+serverConfig.ioServerName+':' + serverConfig.ioServerPort);
 var environmentListener = {
     'environment/temperature': [],
     'environment/humidity': [],
@@ -18,22 +19,16 @@ socket.on('connect', function(data) {
 });
 
 socket.on('environment/temperature', function(data) {
-    environmentListener['environment/temperature'].forEach((callback) => {
-        callback[1].call(callback[0],String.fromCharCode.apply(null, new Uint8Array(data)))
-    })
+    publishEnvironment('environment/temperature', data, true);
 })
 
 socket.on('environment/pressure', function(data) {
-    environmentListener['environment/pressure'].forEach((callback) => {
-        callback[1].call(callback[0],String.fromCharCode.apply(null, new Uint8Array(data)))
-    })
+    publishEnvironment('environment/pressure', data, false);
 })
 
 socket.on('environment/humidity', function(data) {
-    environmentListener['environment/humidity'].forEach((callback) => {
-        callback[1].call(callback[0],String.fromCharCode.apply(null, new Uint8Array(data)))
-    })
-})
+    publishEnvironment('environment/humidity', data, true);
+});
 
 function subscribeEnvironment(ctx, topic, callback) {
     if (topic in environmentListener) {
@@ -41,6 +36,16 @@ function subscribeEnvironment(ctx, topic, callback) {
     }
 }
 
+function publishEnvironment(topic, value, format) {
+    environmentListener[topic].forEach((callback) => {
+        let num = String.fromCharCode.apply(null, new Uint8Array(value));
+        if (format) {
+            num = Number.parseFloat(num).toFixed(2);
+        }
+        callback[1].call(callback[0], num);
+    })
+
+}
 
 
 let temp = 0;

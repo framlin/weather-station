@@ -1,2 +1,3 @@
 js/*/node_modules
 js/*/.idea
+js/http_client/server.config.js
