@@ -5,7 +5,7 @@ var webpack = require('webpack');
 var webpackDevMiddleware = require('webpack-dev-middleware');
 var webpackHotMiddleware = require('webpack-hot-middleware');
 
-let serverConfig = require('../server.config.js');
+var serverConfig = require('../server.config.js');
 
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
