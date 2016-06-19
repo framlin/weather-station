@@ -1,17 +1,17 @@
 let actions = {
-    receiveTemperature: (temperature) => {
+    temperatureReceived: (temperature) => {
         return {
             type: 'TEMPERATURE_RECEIVED',
             value: temperature
         }
     },
-    receivePressure: (pressure) => {
+    pressureReceived: (pressure) => {
         return {
             type: 'PRESSURE_RECEIVED',
             value: pressure
         }
     },
-    receiveHumidity: (humidity) => {
+    humidityReceived: (humidity) => {
         return {
             type: 'HUMIDITY_RECEIVED',
             value: humidity

@@ -1,3 +1,5 @@
 js/*/node_modules
 js/*/.idea
 js/http_client/server.config.js
+js/mqtt_client/server.config.js
+js/ble_central/server.config.js

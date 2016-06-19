@@ -4,6 +4,7 @@
   "description": "mqtt client",
   "main": "mqtt_client.js",
   "dependencies": {
+    "babel-cli": "^6.10.1",
     "mqtt": "^1.11.0"
   },
   "devDependencies": {},

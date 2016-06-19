@@ -19,6 +19,7 @@ function receivePressure(weather, action) {
 
 
 let weatherReducer = function(weather = {}, action) {
+
     switch (action.type) {
         case 'TEMPERATURE_RECEIVED':
             return receiveTemperature(weather, action);
@@ -32,6 +33,6 @@ let weatherReducer = function(weather = {}, action) {
         default:
             return weather;
     }
-}
+};
 
-export default weatherReducer
+export default weatherReducer;

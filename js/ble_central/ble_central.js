@@ -1,8 +1,8 @@
 var noble = require('noble');
-
 var mqtt    = require('mqtt');
-var mqttClient  = mqtt.connect('mqtt://pi3');
+var serverConfig = require('./server.config');
 
+var mqttClient  = mqtt.connect('mqtt://' + serverConfig.mqttServer);
 
 var FRM_ENV_HUMIDITY_UUID   = "2a6f";
 var FRM_ENV_PRESSURE_UUID   = "2a6d";
@@ -13,16 +13,9 @@ var frmEnvHumidity = null;
 var frmEnvPressure = null;
 var frmEnvTemperature = null;
 
-const PAUSE = 10000;
-
 
 noble.on('stateChange', function(state) {
     if (state === 'poweredOn') {
-        //
-        // Once the BLE radio has been powered on, it is possible
-        // to begin scanning for services. Pass an empty array to
-        // scan for all services (uses more time and power).
-        //
         noble.startScanning();
     }
     else {
@@ -34,11 +27,6 @@ noble.on('stateChange', function(state) {
 
 noble.on('discover', function(device) {
 
-    //
-    // The advertisment data contains a name, power level (if available),
-    // certain advertised service uuids, as well as manufacturer data,
-    // which could be formatted as an iBeacon.
-    //
     if (device.address === FRM_ENV_DEVICE) {
 
         // we found a device, stop scanning
@@ -102,18 +90,6 @@ function fetchEnvValues(device) {
 
 
 function readEnvValues(device) {
-
-    function finalize(force) {
-        if ((frmEnvHumidityValue && frmEnvPressureValue && frmEnvTemperatureValue) || force) {
-            device.disconnect();
-            var handle = setTimeout(function onTick() {
-                clearInterval(handle);
-                noble.startScanning();
-            }, PAUSE);
-        }
-    }
-
-
 
     var frmEnvHumidityValue = false;
     var frmEnvPressureValue = false;
@@ -190,11 +166,3 @@ function readEnvValues(device) {
     this.ConvertBase = ConvertBase;
 
 })(this);
-
-/*
- * Usage example:
- * ConvertBase.bin2dec('111'); // '7'
- * ConvertBase.dec2hex('42'); // '2a'
- * ConvertBase.hex2bin('f8'); // '11111000'
- * ConvertBase.dec2bin('22'); // '10110'
- */
