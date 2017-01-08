@@ -16,7 +16,6 @@
  ***************************************************************************/
 
 #include <Wire.h>
-//#include <SPI.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 
@@ -58,9 +57,8 @@ int32_t frmEnvTemperatureCharId;
 Adafruit_BME280 bme; // I2C
 
 void setup() {
-  
+
   Serial.begin(9600);
-  Serial.println(F("BME280 test"));
 
   boolean success;
 
@@ -68,14 +66,13 @@ void setup() {
     Serial.println("Could not find a valid BME280 sensor, check wiring!");
     while (1);
   }
+
   if ( !ble.begin(VERBOSE_MODE) )
   {
     error(F("Couldn't find Bluefruit, make sure it's in CoMmanD mode & check wiring?"));
   }
-  Serial.println( F("OK!") );
 
-  //Perform a factory reset to make sure everything is in a known state 
-  Serial.println(F("Performing a factory reset: "));
+  //Perform a factory reset to make sure everything is in a known state
   if (! ble.factoryReset() ){
        error(F("Couldn't factory reset"));
   }
@@ -83,64 +80,42 @@ void setup() {
   //Disable command echo from Bluefruit
   ble.echo(false);
 
-  Serial.println("Requesting Bluefruit info:");
   //Print Bluefruit information
   ble.info();
 
   //Change the device name to make it easier to find
-  Serial.println(F("Setting device name to 'Framlin ES': "));
-
   if (! ble.sendCommandCheckOK(F("AT+GAPDEVNAME=Framlin ES")) ) {
     error(F("Could not set device name?"));
   }
 
-  Serial.println(F("Adding FRM ENV Service Definition: "));
   success = ble.sendCommandWithIntReply( F("AT+GATTADDSERVICE=UUID128=" FRM_ENV_SERVICE), &frmEnvServiceId);
   if (! success) {
     error(F("Could not add FRM ENV service"));
   }
 
-
-
-  Serial.println(F("Adding the Humidity characteristic: "));
   success = ble.sendCommandWithIntReply( F("AT+GATTADDCHAR=UUID=" FRM_ENV_HUMIDITY ", PROPERTIES=0x12, MIN_LEN=1, MAX_LEN=6, VALUE=00-100000"), &frmEnvHumidityCharId);
     if (! success) {
     error(F("Could not add FRM Humidity characteristic"));
   }
 
-  Serial.println(F("Adding the Pressure characteristic: "));
   success = ble.sendCommandWithIntReply( F("AT+GATTADDCHAR=UUID=" FRM_ENV_PRESSURE ", PROPERTIES=0x12, MIN_LEN=1, MAX_LEN=6, VALUE=00-100000"), &frmEnvPressureCharId);
     if (! success) {
     error(F("Could not add FRM Pressure characteristic"));
   }
 
-  Serial.println(F("Adding the Temperature characteristic: "));
   success = ble.sendCommandWithIntReply( F("AT+GATTADDCHAR=UUID=" FRM_ENV_TEMPERATURE ", PROPERTIES=0x12, MIN_LEN=1, MAX_LEN=6, VALUE=00-100000"), &frmEnvTemperatureCharId);
     if (! success) {
     error(F("Could not add FRM Temperature characteristic"));
   }
 
-/*
-  //Add the Heart Rate Service to the advertising data (needed for Nordic apps to detect the service)
-  Serial.print(F("Adding Heart Rate Service UUID to the advertising payload: "));
-  ble.sendCommandCheckOK( F("AT+GAPSETADVDATA=02-01-06-05-02-0d-18-0a-18") );
-*/
   //Reset the device for the new service setting changes to take effect
-  Serial.print(F("Performing a SW reset (service changes require a reset): "));
   ble.reset();
-
-  Serial.println();
 
 }
 
 
-void printTemperature(float temperature) {
-  int temp = (int)(temperature * 100);
-  
-  //debug
-    Serial.print("Temperature = ");
-    Serial.print(temperature);
-    Serial.println(" *C");
+void sendTemperature(float temperature) {
+    int temp = (int)(temperature * 100);
 
     ble.print( F("AT+GATTCHAR=") );
     ble.print( frmEnvTemperatureCharId );
@@ -149,44 +124,34 @@ void printTemperature(float temperature) {
 
 }
 
-void printHumidity(float humidity) {
-  int hum = (int)(humidity * 100);
-  
-  //debug
-    Serial.print("Humidity = ");
-    Serial.print(humidity);
-    Serial.println(" %");
+void sendHumidity(float humidity) {
+    int hum = (int)(humidity * 100);
   
     ble.print( F("AT+GATTCHAR=") );
     ble.print( frmEnvHumidityCharId );
     ble.print( F(",") );
     ble.println(hum, DEC);
-    
+
 }
 
-void printPressure(float pressure) {
-  int pre = (int)(pressure / 100.0F);
-  
-
-  //debug
-    Serial.print("Pressure = ");
-    Serial.print( pressure / 100.0F);
-    Serial.println(" hPa");
+void sendPressure(float pressure) {
+    int pre = (int)(pressure / 100.0F);
 
     ble.print( F("AT+GATTCHAR=") );
     ble.print( frmEnvPressureCharId );
     ble.print( F(",") );
     ble.println(pre, DEC);
-   
+
 }
 
 void loop() {
-  float temperature = bme.readTemperature();
-  float humidity = bme.readHumidity();
-  float pressure = bme.readPressure();
+    float temperature = bme.readTemperature();
+    float humidity = bme.readHumidity();
+    float pressure = bme.readPressure();
 
-  printHumidity(humidity);
-  printPressure(pressure);
-  printTemperature(temperature);
-  delay(2000);
+    sendHumidity(humidity);
+    sendPressure(pressure);
+    sendTemperature(temperature);
+
+    delay(2000);
 }
